@@ -13,8 +13,29 @@ namespace ResourceAnalyzer {
             lastState = new MEMORYSTATUSEX();
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        private class MEMORYSTATUSEX {
+        
+        [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GlobalMemoryStatusEx([In, Out] MEMORYSTATUSEX lpBuffer);
+        [DllImport("Kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetPhysicallyInstalledSystemMemory(out long TotalMemoryInKilobytes);
+
+        public void GetMemory(){
+            double div = 1024 * 1024;
+            GlobalMemoryStatusEx(lastState);
+            double d = (double)lastState.ullAvailPhys;
+            d = d / div;
+            MessageBox.Show(d.ToString("0.00"));
+            long l;
+            GetPhysicallyInstalledSystemMemory(out l);
+            l = l / 1024 ;
+            MessageBox.Show(l.ToString() + "MB of RAM installed.");
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+        public class MEMORYSTATUSEX {
             public uint dwLength;
             public uint dwMemoryLoad;
             public ulong ullTotalPhys;
@@ -28,15 +49,5 @@ namespace ResourceAnalyzer {
                 this.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
             }
         }
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool GlobalMemoryStatusEx([In, Out] MEMORYSTATUSEX lpBuffer);
-
-        public void GetMemory(){ 
-            GlobalMemoryStatusEx(lastState);
-            double d = (double)lastState.ullAvailPhys;
-            d = d / 1024 / 1024;
-            MessageBox.Show(d.ToString("0.00"));
-        }
-    }
+        
 }

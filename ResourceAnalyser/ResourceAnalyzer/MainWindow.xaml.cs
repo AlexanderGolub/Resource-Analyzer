@@ -22,8 +22,9 @@ namespace ResourceAnalyzer {
             InitializeComponent();
         }
         private void Button_Click(object sender, RoutedEventArgs e) {
-            Memory MemoryObject = new Memory();
-            MemoryObject.GetMemory();
+            //Memory MemoryObject = new Memory();
+            //MemoryObject.GetMemory();
+            Processes.GetProc();
         }
     }
 }
