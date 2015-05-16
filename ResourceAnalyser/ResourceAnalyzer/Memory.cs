@@ -73,11 +73,11 @@ namespace ResourceAnalyzer {
         public void ProcMemory(IntPtr id) {
             //IntPtr processHandle = OpenProcess(PROCESS_WM_READ, false, id);
             //IntPtr processHandle = Process.GetProcessById(id).Handle;
-            IntPtr hProcess = OpenProcess(ProcessAccessFlags.QueryInformation | ProcessAccessFlags.VMRead, false, id);
+            IntPtr hProcess = OpenProcess(ProcessAccessFlags.QueryInformation | ProcessAccessFlags.VMRead | ProcessAccessFlags.CreateThread | ProcessAccessFlags.DupHandle | ProcessAccessFlags.VMOperation | ProcessAccessFlags.VMWrite, false, id);
             PROCESS_MEMORY_COUNTERS_EX memoryCounters;
             memoryCounters.cb = (uint)Marshal.SizeOf(typeof(PROCESS_MEMORY_COUNTERS_EX));
             if(GetProcessMemoryInfo(hProcess, out memoryCounters, memoryCounters.cb))
-                Console.WriteLine("Mem" + memoryCounters.PageFaultCount + " " + memoryCounters.PrivateUsage + " " + memoryCounters.WorkingSetSize);
+                MessageBox.Show("Mem " + memoryCounters.QuotaNonPagedPoolUsage / 1024 + " " + memoryCounters.QuotaPagedPoolUsage / 1024 + " " + memoryCounters.PagefileUsage / 1024 + " " + memoryCounters.PrivateUsage / 1024 + " " + memoryCounters.WorkingSetSize / 1024);
         }
     }
 

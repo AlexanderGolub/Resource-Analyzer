@@ -25,14 +25,14 @@ namespace ResourceAnalyzer {
             UInt32 numIdsCopied = bytesCopied >> 2;
             Console.WriteLine("Number " + numIdsCopied.ToString());
             Memory m = new Memory();
-            for(UInt32 index = 0; index < numIdsCopied; index++) {
+            for(UInt32 index = 0; /*index < numIdsCopied*/ index<10; index++) {
                 PrintProcessNameAndID((int)processIds[index]);
-                Console.WriteLine("File Path: " + index.ToString() + " " + processIds[index].ToString());
+                MessageBox.Show("File Path: " + index.ToString() + " " + processIds[index].ToString());
                 m.ProcMemory((IntPtr)processIds[index]);
             }
         }
         private static void PrintProcessNameAndID(int id) {
-            Console.WriteLine(Process.GetProcessById(id).ProcessName);
+            MessageBox.Show(Process.GetProcessById(id).ProcessName);
         }
     }
 }
