@@ -1,45 +1,53 @@
 ﻿<Window x:Class="ResourceAnalyzer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Resource Analyzer" Height="352" Width="522" Icon="Resources/ra.png">
-    <TabControl HorizontalAlignment="Left" Height="313" VerticalAlignment="Top" Width="505">
+        Title="Resource Analyzer" Height="444.6" Width="591" Icon="Resources/ra.png">
+    <TabControl x:Name="Firsttab" HorizontalAlignment="Left" Height="416" VerticalAlignment="Top" Width="581">
         <TabItem Header="Общая информация">
             <Grid>
             </Grid>
         </TabItem>
         <TabItem Header="Память">
             <Grid>
-                <Button Content="Button" HorizontalAlignment="Left" Margin="409,250,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-                <ScrollViewer HorizontalAlignment="Left" Height="162" Margin="12,10,0,0" VerticalAlignment="Top" Width="474" BorderThickness="1">
-                    <Grid Height="160" Width="455">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70*"/>
-                            <ColumnDefinition Width="54*"/>
-                            <ColumnDefinition Width="54*"/>
-                            <ColumnDefinition Width="54*"/>
-                            <ColumnDefinition Width="54*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Column="0" Grid.Row="0" Content="Процесс" HorizontalContentAlignment="Center"/>
-                        <Label Grid.Column="1" Grid.Row="0" Content="ID" HorizontalContentAlignment="Center"/>
-                        <Label Grid.Column="0" Grid.Row="0" Content="Процесс" HorizontalContentAlignment="Center"/>
-                        <Label Grid.Column="0" Grid.Row="0" Content="Процесс" HorizontalContentAlignment="Center"/>
-                        <Label Grid.Column="0" Grid.Row="0" Content="Процесс" HorizontalContentAlignment="Center"/>
-                        <Border Grid.Row="0" Grid.ColumnSpan="10" BorderThickness="0,1" BorderBrush="Gray"/>
-                        <Border Grid.Column="0" Grid.RowSpan="10" BorderThickness="1,0" BorderBrush="Gray"/>
-                        <Border Grid.Column="2" Grid.RowSpan="10" BorderThickness="1,0" BorderBrush="Gray"/>
-                        <Border Grid.Column="4" Grid.RowSpan="10" BorderThickness="1,0" BorderBrush="Gray"/>
-                        <GridSplitter Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="Black" ShowsPreview="true" Width="0"/>
-                    </Grid>
-                </ScrollViewer>
-                <Border BorderBrush="Black" BorderThickness="1,1,1,1" HorizontalAlignment="Left" Height="162" Margin="13,10,0,0" VerticalAlignment="Top" Width="473"/>
+                <ListView x:Name="listview" HorizontalAlignment="Left" Height="156" Margin="5,5,0,0" VerticalAlignment="Top" Width="483">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Процесс" DisplayMemberBinding="{Binding Proc}" Width="100"/>
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="50"/>
+                            <GridViewColumn Header="Выделено" DisplayMemberBinding="{Binding PR}" Width="70" />
+                            <GridViewColumn Header="Рабочий набор" DisplayMemberBinding="{Binding WS}" Width="100"/>
+                            <GridViewColumn Header="Невыгружаемый пул" DisplayMemberBinding="{Binding NPP}" Width="159"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <TabControl HorizontalAlignment="Left" Height="122" Margin="5,166,0,0" VerticalAlignment="Top" Width="188">
+                    <TabItem Header="Всего">
+                        <Grid>
+                            <Label Content="Физическая" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="93"/>
+                            <Label Content="Файл подкачки" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="93"/>
+                            <Label Content="Виртуальная" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Width="93"/>
+                            <Label x:Name="TPhys" Content="" HorizontalAlignment="Left" Margin="108,10,0,0" VerticalAlignment="Top" Width="67"/>
+                            <Label x:Name="TPageF" Content="" HorizontalAlignment="Left" Margin="108,36,0,0" VerticalAlignment="Top" Width="67"/>
+                            <Label x:Name="TVirt" Content="" HorizontalAlignment="Left" Margin="108,62,0,0" VerticalAlignment="Top" Width="67"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Доступно">
+                        <Grid>
+                            <Label Content="Физическая" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="93"/>
+                            <Label Content="Файл подкачки" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="93"/>
+                            <Label Content="Виртуальная" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Width="93"/>
+                            <Label x:Name="APhys" Content="" HorizontalAlignment="Left" Margin="108,10,0,0" VerticalAlignment="Top" Width="67"/>
+                            <Label x:Name="APageF" Content="" HorizontalAlignment="Left" Margin="108,36,0,0" VerticalAlignment="Top" Width="67"/>
+                            <Label x:Name="AVirt" Content="" HorizontalAlignment="Left" Margin="108,62,0,0" VerticalAlignment="Top" Width="67"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <Label Content="Установлено" HorizontalAlignment="Left" Margin="22,303,0,0" VerticalAlignment="Top" Width="83"/>
+                <Label x:Name="IPhys" Content="Label" HorizontalAlignment="Left" Margin="122,303,0,0" VerticalAlignment="Top" Width="67"/>
             </Grid>
         </TabItem>
         <TabItem Header="Диск">
-            <Grid>
-            </Grid>
+            <Grid/>
         </TabItem>
         <TabItem Header="Процессор">
             <Grid Background="#FFE5E5E5"/>
