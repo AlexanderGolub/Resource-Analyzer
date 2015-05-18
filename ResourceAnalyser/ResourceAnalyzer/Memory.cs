@@ -8,13 +8,7 @@ using System.Windows;
 using System.Diagnostics;
 
 namespace ResourceAnalyzer {
-    public static class Memory {
-        //MEMORYSTATUSEX lastState;
-
-        /*public Memory() {
-            //lastState = new MEMORYSTATUSEX();
-        }*/
-        
+    public static class Memory {       
         [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GlobalMemoryStatusEx([In, Out] MEMORYSTATUSEX lpBuffer);

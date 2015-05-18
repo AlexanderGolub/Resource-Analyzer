@@ -9,18 +9,23 @@
         </TabItem>
         <TabItem Header="Память">
             <Grid>
-                <ListView x:Name="listview" HorizontalAlignment="Left" Height="156" Margin="5,5,0,0" VerticalAlignment="Top" Width="483">
+                <ListView x:Name="listview" HorizontalAlignment="Left" Height="200" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Процесс" DisplayMemberBinding="{Binding Proc}" Width="100"/>
                             <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="50"/>
-                            <GridViewColumn Header="Выделено" DisplayMemberBinding="{Binding PR}" Width="70" />
-                            <GridViewColumn Header="Рабочий набор" DisplayMemberBinding="{Binding WS}" Width="100"/>
-                            <GridViewColumn Header="Невыгружаемый пул" DisplayMemberBinding="{Binding NPP}" Width="159"/>
+                            <GridViewColumn Header="Выделено КБ" DisplayMemberBinding="{Binding PR}" Width="115" />
+                            <GridViewColumn Header="Рабочий набор КБ" DisplayMemberBinding="{Binding WS}" Width="125"/>
+                            <GridViewColumn Header="Невыгружаемый пул КБ" DisplayMemberBinding="{Binding NPP}" Width="140"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <TabControl HorizontalAlignment="Left" Height="122" Margin="5,166,0,0" VerticalAlignment="Top" Width="188">
+                <TabControl HorizontalAlignment="Left" Height="122" Margin="5,210,0,0" VerticalAlignment="Top" Width="188">
                     <TabItem Header="Всего">
                         <Grid>
                             <Label Content="Физическая" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="93"/>
@@ -42,15 +47,33 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
-                <Label Content="Установлено" HorizontalAlignment="Left" Margin="22,303,0,0" VerticalAlignment="Top" Width="83"/>
-                <Label x:Name="IPhys" Content="Label" HorizontalAlignment="Left" Margin="122,303,0,0" VerticalAlignment="Top" Width="67"/>
+                <Label Content="Установлено" HorizontalAlignment="Left" Margin="17,337,0,0" VerticalAlignment="Top" Width="83"/>
+                <Label x:Name="IPhys" Content="Label" HorizontalAlignment="Left" Margin="117,337,0,0" VerticalAlignment="Top" Width="67"/>
             </Grid>
         </TabItem>
         <TabItem Header="Диск">
             <Grid/>
         </TabItem>
         <TabItem Header="Процессор">
-            <Grid Background="#FFE5E5E5"/>
+            <Grid>
+                <ListView HorizontalAlignment="Left" Height="200" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Процесс" DisplayMemberBinding="{Binding Proc}" Width="100"/>
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="50"/>
+                            <GridViewColumn Header="Выделено МБ" DisplayMemberBinding="{Binding PR}" Width="115" />
+                            <GridViewColumn Header="Рабочий набор МБ" DisplayMemberBinding="{Binding WS}" Width="125"/>
+                            <GridViewColumn Header="Невыгружаемый пул МБ" DisplayMemberBinding="{Binding NPP}" Width="140"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Label x:Name="CPU" Content="Proc" HorizontalAlignment="Left" Margin="53,246,0,0" VerticalAlignment="Top" Width="39"/>
+            </Grid>
         </TabItem>
     </TabControl>
 </Window>

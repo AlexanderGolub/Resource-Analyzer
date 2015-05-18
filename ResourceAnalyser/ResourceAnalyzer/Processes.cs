@@ -10,6 +10,7 @@ using System.Diagnostics;
 namespace ResourceAnalyzer {
     public class Processes {
         private StringCollection _processes;
+        private UInt32 _number;
 
         [DllImport("Psapi.dll", SetLastError = true)]
         static extern bool EnumProcesses(
@@ -18,6 +19,7 @@ namespace ResourceAnalyzer {
 
         public Processes(){
             _processes = new StringCollection();
+            _number = 0;
             GetProc();
         }
 
@@ -29,10 +31,10 @@ namespace ResourceAnalyzer {
 
             EnumProcesses(processIds, arrayBytesSize, out bytesCopied);
 
-            UInt32 numIdsCopied = bytesCopied >> 2;
-            Console.WriteLine("Number " + numIdsCopied.ToString());
+            this._number = bytesCopied >> 2;
+            Console.WriteLine("Number " + _number.ToString());
 
-            for(UInt32 index = 0; index < numIdsCopied; index++) {
+            for(UInt32 index = 1; index < _number; index++) {
                 this._processes.Add(GetProcessName((int)processIds[index]) + " " + processIds[index].ToString());
             }
         }
@@ -43,6 +45,10 @@ namespace ResourceAnalyzer {
 
         public StringCollection GetInfo() {
             return _processes;
+        }
+
+        public UInt32 GetNumber() {
+            return _number;
         }
     }
 }

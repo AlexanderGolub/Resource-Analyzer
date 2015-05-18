@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,10 +18,28 @@ namespace ResourceAnalyzer {
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
+        CPU _a;
         public MainWindow() {
             InitializeComponent();
+
+            _dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            _dispatcherTimer.Tick += new EventHandler(this.dispatcherTimer_Tick);
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 600);
+            _dispatcherTimer.Start();
+
+            _a = new CPU();
+
+            ShowMemory();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e) {
+            this.CPU.Content = _a.Usage().ToString() + "%";
+        }
+
+        private void ShowMemory() {
             Processes a = new Processes();
-            MEMORYSTATUSEX state = new MEMORYSTATUSEX();;
+            MEMORYSTATUSEX state = new MEMORYSTATUSEX(); ;
             Memory.GetMemory(state);
             this.APhys.Content = state.ullAvailPhys / 1024 / 1024 + " МБ";
             this.APageF.Content = state.ullAvailPageFile / 1024 / 1024 + " МБ";
@@ -43,13 +61,13 @@ namespace ResourceAnalyzer {
                 this.listview.Items.Add(new MyData { Proc = words[0], ID = words[1], PR = words2[0], WS = words2[1], NPP = words2[2] });
             }
         }
-    }
 
-    public class MyData {
-        public string Proc { get; set; }
-        public string ID { get; set; }
-        public string PR { get; set; }
-        public string WS { get; set; }
-        public string NPP { get; set; }
+        public class MyData {
+            public string Proc { get; set; }
+            public string ID { get; set; }
+            public string PR { get; set; }
+            public string WS { get; set; }
+            public string NPP { get; set; }
+        }
     }
 }
