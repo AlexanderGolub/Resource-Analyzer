@@ -7,9 +7,9 @@
             <Grid>
             </Grid>
         </TabItem>
-        <TabItem Header="Память">
+        <TabItem Header="Память" x:Name="MemTab">
             <Grid>
-                <ListView x:Name="listview" HorizontalAlignment="Left" Height="200" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
+                <ListView x:Name="MemListView" HorizontalAlignment="Left" Height="200" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -26,7 +26,7 @@
                     </ListView.View>
                 </ListView>
                 <TabControl HorizontalAlignment="Left" Height="122" Margin="5,210,0,0" VerticalAlignment="Top" Width="188">
-                    <TabItem Header="Всего">
+                    <TabItem Header="Всего" x:Name="TotalTab">
                         <Grid>
                             <Label Content="Физическая" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="93"/>
                             <Label Content="Файл подкачки" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="93"/>
@@ -36,7 +36,7 @@
                             <Label x:Name="TVirt" Content="" HorizontalAlignment="Left" Margin="108,62,0,0" VerticalAlignment="Top" Width="67"/>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Доступно">
+                    <TabItem Header="Доступно" x:Name="AvailTab">
                         <Grid>
                             <Label Content="Физическая" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="93"/>
                             <Label Content="Файл подкачки" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="93"/>
@@ -48,15 +48,15 @@
                     </TabItem>
                 </TabControl>
                 <Label Content="Установлено" HorizontalAlignment="Left" Margin="17,337,0,0" VerticalAlignment="Top" Width="83"/>
-                <Label x:Name="IPhys" Content="Label" HorizontalAlignment="Left" Margin="117,337,0,0" VerticalAlignment="Top" Width="67"/>
+                <Label x:Name="IPhys" Content="" HorizontalAlignment="Left" Margin="117,337,0,0" VerticalAlignment="Top" Width="67"/>
             </Grid>
         </TabItem>
         <TabItem Header="Диск">
             <Grid/>
         </TabItem>
-        <TabItem Header="Процессор">
+        <TabItem Header="Процессор" x:Name="CPUTab" GotFocus="CPUTab_GotFocus" LostFocus="CPUTab_LostFocus">
             <Grid>
-                <ListView HorizontalAlignment="Left" Height="200" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
+                <ListView x:Name="CPUListViev" HorizontalAlignment="Left" Height="200" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -66,13 +66,12 @@
                         <GridView>
                             <GridViewColumn Header="Процесс" DisplayMemberBinding="{Binding Proc}" Width="100"/>
                             <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="50"/>
-                            <GridViewColumn Header="Выделено МБ" DisplayMemberBinding="{Binding PR}" Width="115" />
-                            <GridViewColumn Header="Рабочий набор МБ" DisplayMemberBinding="{Binding WS}" Width="125"/>
-                            <GridViewColumn Header="Невыгружаемый пул МБ" DisplayMemberBinding="{Binding NPP}" Width="140"/>
+                            <GridViewColumn Header="Процент загрузки" DisplayMemberBinding="{Binding Usage}" Width="380" />
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <Label x:Name="CPU" Content="Proc" HorizontalAlignment="Left" Margin="53,246,0,0" VerticalAlignment="Top" Width="39"/>
+                <Label x:Name="CPU" Content="Процент загрузки" HorizontalAlignment="Left" Margin="10,303,0,0" VerticalAlignment="Top" Width="109"/>
+                <Label x:Name="CPUValue" Content="" HorizontalAlignment="Left" Margin="141,303,0,0" VerticalAlignment="Top" Width="39"/>
             </Grid>
         </TabItem>
     </TabControl>

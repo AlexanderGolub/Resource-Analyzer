@@ -17,8 +17,8 @@ namespace ResourceAnalyzer {
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GetPhysicallyInstalledSystemMemory(out long TotalMemoryInKilobytes);
 
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        /*[DllImport("kernel32.dll")]
+        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);*/
 
         [DllImport("kernel32.dll")]
         static extern IntPtr OpenProcess(ProcessAccessFlags dwDesiredAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, IntPtr dwProcessId);
@@ -67,7 +67,8 @@ namespace ResourceAnalyzer {
 
         public static string ProcMemory(IntPtr id) {
             string info;
-            IntPtr hProcess = OpenProcess(ProcessAccessFlags.QueryInformation | ProcessAccessFlags.VMRead | ProcessAccessFlags.CreateThread | ProcessAccessFlags.DupHandle | ProcessAccessFlags.VMOperation | ProcessAccessFlags.VMWrite, false, id);
+            IntPtr hProcess = OpenProcess(ProcessAccessFlags.QueryInformation | ProcessAccessFlags.VMRead | ProcessAccessFlags.CreateThread 
+                | ProcessAccessFlags.DupHandle | ProcessAccessFlags.VMOperation | ProcessAccessFlags.VMWrite, false, id);
             PROCESS_MEMORY_COUNTERS_EX memoryCounters;
             
             memoryCounters.cb = (uint)Marshal.SizeOf(typeof(PROCESS_MEMORY_COUNTERS_EX));
