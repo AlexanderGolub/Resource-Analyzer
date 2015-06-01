@@ -32,7 +32,6 @@ namespace ResourceAnalyzer {
             EnumProcesses(processIds, arrayBytesSize, out bytesCopied);
 
             this._number = bytesCopied >> 2;
-            //Console.WriteLine("Number " + _number.ToString());
 
             for(UInt32 index = 1; index < _number; index++) {
                 this._processes.Add(GetProcessName((int)processIds[index]) + " " + processIds[index].ToString());

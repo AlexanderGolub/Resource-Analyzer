@@ -1,6 +1,7 @@
 ﻿<Window x:Class="ResourceAnalyzer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        ResizeMode="NoResize"
         Title="Resource Analyzer" Height="444.6" Width="591" Icon="Resources/ra.png">
     <TabControl x:Name="Firsttab" HorizontalAlignment="Left" Height="416" VerticalAlignment="Top" Width="581">
         <TabItem Header="Общая информация">
@@ -51,12 +52,9 @@
                 <Label x:Name="IPhys" Content="" HorizontalAlignment="Left" Margin="117,337,0,0" VerticalAlignment="Top" Width="67"/>
             </Grid>
         </TabItem>
-        <TabItem Header="Диск">
-            <Grid/>
-        </TabItem>
-        <TabItem Header="Процессор" x:Name="CPUTab" GotFocus="CPUTab_GotFocus" LostFocus="CPUTab_LostFocus">
+        <TabItem Header="Диск" x:Name="HDDTab" GotFocus="HDDTab_GotFocus" LostFocus="HDDTab_LostFocus" >
             <Grid>
-                <ListView x:Name="CPUListViev" HorizontalAlignment="Left" Height="200" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
+                <ListView x:Name="HDDListView" HorizontalAlignment="Left" Height="110" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -64,14 +62,36 @@
                     </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Процесс" DisplayMemberBinding="{Binding Proc}" Width="100"/>
-                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="50"/>
-                            <GridViewColumn Header="Процент загрузки" DisplayMemberBinding="{Binding Usage}" Width="380" />
+                            <GridViewColumn Header="Диск" DisplayMemberBinding="{Binding Disk}" Width="50"/>
+                            <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Name}" Width="120"/>
+                            <GridViewColumn Header="Файловая система" DisplayMemberBinding="{Binding FS}" Width="115" />
+                            <GridViewColumn Header="Доступно ГБ" DisplayMemberBinding="{Binding Av}" Width="125"/>
+                            <GridViewColumn Header="Всего ГБ" DisplayMemberBinding="{Binding Tot}" Width="120"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <Label x:Name="CPU" Content="Процент загрузки" HorizontalAlignment="Left" Margin="10,303,0,0" VerticalAlignment="Top" Width="109"/>
-                <Label x:Name="CPUValue" Content="" HorizontalAlignment="Left" Margin="141,303,0,0" VerticalAlignment="Top" Width="39"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Процессор" x:Name="CPUTab" GotFocus="CPUTab_GotFocus" LostFocus="CPUTab_LostFocus">
+            <Grid>
+                <ListView x:Name="CPUListViev" HorizontalAlignment="Left" Height="267" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Процесс" DisplayMemberBinding="{Binding Proc}" Width="200"/>
+                            <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="100"/>
+                            <GridViewColumn Header="Процент загрузки" DisplayMemberBinding="{Binding Usage}" Width="230" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Label x:Name="CPU" Content="Процент загрузки" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="109"/>
+                <Label x:Name="CPUValue" Content="" HorizontalAlignment="Left" Margin="173,295,0,0" VerticalAlignment="Top" Width="39"/>
+                <Label x:Name="CPU_copy" Content="Количество процессов" HorizontalAlignment="Left" Margin="10,334,0,0" VerticalAlignment="Top" Width="136"/>
+                <Label x:Name="ProcNum" Content="" HorizontalAlignment="Left" Margin="173,334,0,0" VerticalAlignment="Top" Width="39"/>
             </Grid>
         </TabItem>
     </TabControl>

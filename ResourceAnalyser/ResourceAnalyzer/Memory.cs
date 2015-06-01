@@ -21,7 +21,7 @@ namespace ResourceAnalyzer {
         public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);*/
 
         [DllImport("kernel32.dll")]
-        static extern IntPtr OpenProcess(ProcessAccessFlags dwDesiredAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, IntPtr dwProcessId);
+        static extern IntPtr OpenProcess(ProcessAccessFlags dwDesiredAccess, bool bInheritHandle, IntPtr dwProcessId);
 
         [DllImport("psapi.dll", SetLastError = true)]
         static extern bool GetProcessMemoryInfo(IntPtr hProcess, out PROCESS_MEMORY_COUNTERS_EX counters, uint size);
@@ -95,6 +95,5 @@ namespace ResourceAnalyzer {
         public MEMORYSTATUSEX() {
             this.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
         }
-    }
-        
+    }       
 }

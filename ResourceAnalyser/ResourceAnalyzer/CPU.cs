@@ -15,6 +15,7 @@ namespace ResourceAnalyzer {
         ComTypes.FILETIME sysIdle, sysKernel, sysUser;
         long _runCount;
 
+        
         public CPU() {
             sysIdle.dwHighDateTime = sysIdle.dwLowDateTime = 0;
             sysKernel.dwHighDateTime = sysKernel.dwLowDateTime = 0;
@@ -22,67 +23,6 @@ namespace ResourceAnalyzer {
 
             _runCount = 0;
         }
-
-        /*public short GetUsage() {
-            short cpuCopy = _cpuUsage;
-            if(Interlocked.Increment(ref _runCount) == 1) {
-                if(!EnoughTimePassed) {
-                    Interlocked.Decrement(ref _runCount);
-                    return cpuCopy;
-                }
-
-                ComTypes.FILETIME sysIdle, sysKernel, sysUser;
-                TimeSpan procTime;
-
-                Process process = Process.GetProcessById(4);
-                procTime = process.TotalProcessorTime;
-
-                if(!GetSystemTimes(out sysIdle, out sysKernel, out sysUser)) {
-                    Interlocked.Decrement(ref _runCount);
-                    return cpuCopy;
-                }
-
-                if(!IsFirstRun) {
-                    UInt64 sysKernelDiff =
-                       SubtractTimes(sysKernel, _prevSysKernel);
-                    UInt64 sysUserDiff =
-                       SubtractTimes(sysUser, _prevSysUser);
-
-                    UInt64 sysTotal = sysKernelDiff + sysUserDiff;
-
-                    Int64 procTotal = procTime.Ticks - _prevProcTotal.Ticks;
-
-                    if(sysTotal > 0) {
-                        _cpuUsage = (short)((100.0 * procTotal) / sysTotal);
-                    }
-                }
-
-                _prevProcTotal = procTime;
-                _prevSysKernel = sysKernel;
-                _prevSysUser = sysUser;
-
-                _lastRun = DateTime.Now;
-
-                cpuCopy = _cpuUsage;
-            }
-            Interlocked.Decrement(ref _runCount);
-
-            return cpuCopy;
-        }
-
-        private bool EnoughTimePassed {
-            get {
-                const int minimumElapsedMS = 250;
-                TimeSpan sinceLast = DateTime.Now - _lastRun;
-                return sinceLast.TotalMilliseconds > minimumElapsedMS;
-            }
-        }
-
-        private bool IsFirstRun {
-            get {
-                return (_lastRun == DateTime.MinValue);
-            }
-        }*/
 
         public Int32 Usage() {
             ComTypes.FILETIME sysIdle2, sysKernel2, sysUser2;

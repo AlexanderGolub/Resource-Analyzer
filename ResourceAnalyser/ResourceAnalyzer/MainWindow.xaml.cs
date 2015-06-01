@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,11 +24,9 @@ namespace ResourceAnalyzer {
         private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
         private System.Windows.Threading.DispatcherTimer _dispatcherTimer2;
         CPU _a;
-        long _runCount;
         public MainWindow() {
             InitializeComponent();
             _a = new CPU();
-            _runCount = 0;
             _dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             _dispatcherTimer.Tick += new EventHandler(this.dispatcherTimer_Tick);
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 600);
@@ -40,23 +39,20 @@ namespace ResourceAnalyzer {
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e) {
-            if(_runCount != 0)
-                this.CPUListViev.Items.Clear();
             Int32 totalUsage = _a.Usage();
             if(totalUsage <= 100) {
                 this.CPUValue.Content = totalUsage.ToString() + "%";
             }
-            _runCount++;
         }
 
         private void dispatcherTimer2_Tick(object sender, EventArgs e) {
             ShowCPU();
         }
 
-        private void ShowCPU() {            
-            Processes a = new Processes();
-            Collection<TimeData> Times = new Collection<TimeData>();
+        public void ShowCPU() {
             StringCollection inf = new StringCollection();
+            Processes a = new Processes();
+            List<TimeData> Times = new List<TimeData>();
             inf = a.GetInfo();
             char[] delimiterChars = { ' ' };
             foreach(var obj in inf) {
@@ -67,14 +63,13 @@ namespace ResourceAnalyzer {
                 time._proc = words[0];
                 Times.Add(time);
             }
-            Thread.Sleep(400);
-            this.CPUListViev.Items.Clear();
+            this.ProcNum.Content = inf.Count;
+            Thread.Sleep(300);
             foreach(var obj in Times) {
                 CPUProc.ProcUsage(obj);
                 if(obj._usage != 0) {
                     this.CPUListViev.Items.Add(new CPUData { Proc = obj._proc, ID = obj._id.ToString(), Usage = obj._usage.ToString() });
                 }
-                
             }
         }
 
@@ -112,14 +107,30 @@ namespace ResourceAnalyzer {
         }
 
         private void CPUTab_GotFocus(object sender, RoutedEventArgs e) {
-            //_dispatcherTimer.Start();
+            _dispatcherTimer.Start();
             _dispatcherTimer2.Start();
         }
 
         private void CPUTab_LostFocus(object sender, RoutedEventArgs e) {
-            //_dispatcherTimer.Stop();
+            _dispatcherTimer.Stop();
             _dispatcherTimer2.Stop();
         }
+
+        private void HDDTab_GotFocus(object sender, RoutedEventArgs e) {
+            StringCollection output = new StringCollection();
+            output = HDD.Show();
+            char[] delimiterChars = { ' ' };
+            foreach(var obj in output) {
+                string[] words = obj.Split(delimiterChars);
+                this.HDDListView.Items.Add(new HDDData { Disk = words[0], Name = words[1], FS = words[2], Av = words[3], Tot = words[4] });
+            }
+        }
+
+        private void HDDTab_LostFocus(object sender, RoutedEventArgs e) {
+            this.HDDListView.Items.Clear();
+        }
+
+
     }
 
     public class MemData {
@@ -128,6 +139,14 @@ namespace ResourceAnalyzer {
         public string PR { get; set; }
         public string WS { get; set; }
         public string NPP { get; set; }
+    }
+
+    public class HDDData {
+        public string Disk { get; set; }
+        public string Name { get; set; }
+        public string FS { get; set; }
+        public string Av { get; set; }
+        public string Tot { get; set; }
     }
 
     public class CPUData {
