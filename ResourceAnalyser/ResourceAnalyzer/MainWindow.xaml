@@ -88,10 +88,14 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <Label x:Name="CPU" Content="Процент загрузки" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="109"/>
-                <Label x:Name="CPUValue" Content="" HorizontalAlignment="Left" Margin="173,295,0,0" VerticalAlignment="Top" Width="39"/>
-                <Label x:Name="CPU_copy" Content="Количество процессов" HorizontalAlignment="Left" Margin="10,334,0,0" VerticalAlignment="Top" Width="136"/>
-                <Label x:Name="ProcNum" Content="" HorizontalAlignment="Left" Margin="173,334,0,0" VerticalAlignment="Top" Width="39"/>
+                <Label x:Name="CPU" Content="Процент загрузки" HorizontalAlignment="Left" Margin="10,282,0,0" VerticalAlignment="Top" Width="109"/>
+                <Label x:Name="CPUValue" Content="" HorizontalAlignment="Left" Margin="173,282,0,0" VerticalAlignment="Top" Width="39"/>
+                <Label x:Name="CPU_copy" Content="Количество процессов" HorizontalAlignment="Left" Margin="10,321,0,0" VerticalAlignment="Top" Width="136"/>
+                <Label x:Name="ProcNum" Content="" HorizontalAlignment="Left" Margin="173,321,0,0" VerticalAlignment="Top" Width="39"/>
+                <Label x:Name="Model" Content="Модель" HorizontalAlignment="Left" Margin="233,282,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="CPUModelValue" Content="" HorizontalAlignment="Left" Margin="291,282,0,0" VerticalAlignment="Top" Width="270"/>
+                <Label x:Name="Name" Content="Имя" HorizontalAlignment="Left" Margin="233,321,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="CPUNameValue" Content="" HorizontalAlignment="Left" Margin="291,321,0,0" VerticalAlignment="Top" Width="270"/>
             </Grid>
         </TabItem>
     </TabControl>

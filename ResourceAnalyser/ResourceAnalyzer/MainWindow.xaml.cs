@@ -55,21 +55,27 @@ namespace ResourceAnalyzer {
             List<TimeData> Times = new List<TimeData>();
             inf = a.GetInfo();
             char[] delimiterChars = { ' ' };
-            foreach(var obj in inf) {
-                TimeData time = new TimeData();
-                string[] words = obj.Split(delimiterChars);
-                time._id = (IntPtr)Convert.ToInt32(words[1]);
-                CPUProc.ProcUsage(time);
-                time._proc = words[0];
-                Times.Add(time);
-            }
-            this.ProcNum.Content = inf.Count;
-            Thread.Sleep(300);
-            foreach(var obj in Times) {
-                CPUProc.ProcUsage(obj);
-                if(obj._usage != 0) {
-                    this.CPUListViev.Items.Add(new CPUData { Proc = obj._proc, ID = obj._id.ToString(), Usage = obj._usage.ToString() });
+            try {
+                foreach(var obj in inf) {
+                    TimeData time = new TimeData();
+                    string[] words = obj.Split(delimiterChars);
+                    time._id = (IntPtr)Convert.ToInt32(words[1]);
+                    CPUProc.ProcUsage(time);
+                    time._proc = words[0];
+                    Times.Add(time);
                 }
+                this.ProcNum.Content = a.GetNumber().ToString();
+                Console.WriteLine(a.GetNumber().ToString());
+                Thread.Sleep(300);
+                foreach(var obj in Times) {
+                    CPUProc.ProcUsage(obj);
+                    if(obj._usage != 0) {
+                        this.CPUListViev.Items.Add(new CPUData { Proc = obj._proc, ID = obj._id.ToString(), Usage = obj._usage.ToString() });
+                    }
+                }
+            }
+            catch {
+
             }
         }
 
@@ -85,16 +91,20 @@ namespace ResourceAnalyzer {
             this.TVirt.Content = state.ullTotalVirtual / 1024 / 1024 + " МБ";
             long l = Memory.GetPhysMemory();
             this.IPhys.Content = l / 1024 + " МБ";
-
             StringCollection inf = new StringCollection();
             inf = a.GetInfo();
             char[] delimiterChars = { ' ' };
-            foreach(var obj in inf) {
-                string[] words = obj.Split(delimiterChars);
-                int id = Convert.ToInt32(words[1]);
-                string filler = Memory.ProcMemory((IntPtr)id);
-                string[] words2 = filler.Split(delimiterChars);
-                this.MemListView.Items.Add(new MemData { Proc = words[0], ID = words[1], PR = words2[0], WS = words2[1], NPP = words2[2] });
+            try {
+                foreach(var obj in inf) {
+                    string[] words = obj.Split(delimiterChars);
+                    int id = Convert.ToInt32(words[1]);
+                    string filler = Memory.ProcMemory((IntPtr)id);
+                    string[] words2 = filler.Split(delimiterChars);
+                    this.MemListView.Items.Add(new MemData { Proc = words[0], ID = words[1], PR = words2[0], WS = words2[1], NPP = words2[2] });
+                }
+            }
+            catch {
+                this.MemListView.Items.Add(new MemData { Proc = "NaN", ID = "NaN", PR = "NaN", WS = "NaN", NPP = "NaN" });
             }
         }
 
@@ -107,6 +117,8 @@ namespace ResourceAnalyzer {
         }
 
         private void CPUTab_GotFocus(object sender, RoutedEventArgs e) {
+            this.CPUModelValue.Content = CPUProc.RegInfo(1);
+            this.CPUNameValue.Content = CPUProc.RegInfo(2);
             _dispatcherTimer.Start();
             _dispatcherTimer2.Start();
         }
@@ -119,7 +131,7 @@ namespace ResourceAnalyzer {
         private void HDDTab_GotFocus(object sender, RoutedEventArgs e) {
             StringCollection output = new StringCollection();
             output = HDD.Show();
-            char[] delimiterChars = { ' ' };
+            char[] delimiterChars = { '_' };
             foreach(var obj in output) {
                 string[] words = obj.Split(delimiterChars);
                 this.HDDListView.Items.Add(new HDDData { Disk = words[0], Name = words[1], FS = words[2], Av = words[3], Tot = words[4] });

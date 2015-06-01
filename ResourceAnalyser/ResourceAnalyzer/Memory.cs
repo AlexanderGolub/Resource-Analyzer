@@ -10,15 +10,12 @@ using System.Diagnostics;
 namespace ResourceAnalyzer {
     public static class Memory {       
         [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
+        //[return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GlobalMemoryStatusEx([In, Out] MEMORYSTATUSEX lpBuffer);
 
         [DllImport("Kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
+        //[return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GetPhysicallyInstalledSystemMemory(out long TotalMemoryInKilobytes);
-
-        /*[DllImport("kernel32.dll")]
-        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);*/
 
         [DllImport("kernel32.dll")]
         static extern IntPtr OpenProcess(ProcessAccessFlags dwDesiredAccess, bool bInheritHandle, IntPtr dwProcessId);
@@ -67,17 +64,23 @@ namespace ResourceAnalyzer {
 
         public static string ProcMemory(IntPtr id) {
             string info;
-            IntPtr hProcess = OpenProcess(ProcessAccessFlags.QueryInformation | ProcessAccessFlags.VMRead | ProcessAccessFlags.CreateThread 
+            try {
+                IntPtr hProcess = OpenProcess(ProcessAccessFlags.QueryInformation | ProcessAccessFlags.VMRead | ProcessAccessFlags.CreateThread
                 | ProcessAccessFlags.DupHandle | ProcessAccessFlags.VMOperation | ProcessAccessFlags.VMWrite, false, id);
-            PROCESS_MEMORY_COUNTERS_EX memoryCounters;
-            
-            memoryCounters.cb = (uint)Marshal.SizeOf(typeof(PROCESS_MEMORY_COUNTERS_EX));
+                PROCESS_MEMORY_COUNTERS_EX memoryCounters;
+                memoryCounters.cb = (uint)Marshal.SizeOf(typeof(PROCESS_MEMORY_COUNTERS_EX));
 
-            if(GetProcessMemoryInfo(hProcess, out memoryCounters, memoryCounters.cb))
-                info = memoryCounters.PrivateUsage / 1024 + " " + memoryCounters.WorkingSetSize / 1024 + " " + memoryCounters.QuotaNonPagedPoolUsage / 1024;
-            else
+                if(GetProcessMemoryInfo(hProcess, out memoryCounters, memoryCounters.cb)) {
+                    info = memoryCounters.PrivateUsage / 1024 + " " + memoryCounters.WorkingSetSize / 1024 + " " + memoryCounters.QuotaNonPagedPoolUsage / 1024;
+                }
+                else
+                    info = "NaN NaN NaN";
+                return info;
+            }
+            catch{
                 info = "NaN NaN NaN";
-            return info;
+                return info;
+            }
         }
     }
 

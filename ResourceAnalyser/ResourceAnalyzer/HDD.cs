@@ -87,22 +87,22 @@ namespace ResourceAnalyzer {
                 if(!success)
                     throw new System.ComponentModel.Win32Exception();
 
-                info = disk + " " + volnamestr + " " + fsnamestr + " " + FreeBytesAvailable / 1024 / 1024 / 1024 + " " + TotalNumberOfBytes / 1024 / 1024 / 1024;
+                info = disk + "_" + volnamestr + "_" + fsnamestr + "_" + FreeBytesAvailable / 1024 / 1024 / 1024 + "_" + TotalNumberOfBytes / 1024 / 1024 / 1024;
                 return info;
             }
             if(dt == DriveType.CDROM) {
-                info = disk + " " + "CD-ROM" + " " + "NaN" + " " + "NaN" + " " + "NaN";
+                info = disk + "_" + "CD-ROM" + "_" + "NaN" + "_" + "NaN" + "_" + "NaN";
                 return info;
             }
             if(dt == DriveType.Remote) {
-                info = disk + " " + "Remote" + " " + "NaN" + " " + "NaN" + " " + "NaN";
+                info = disk + "_" + "Remote" + "_" + "NaN" + "_" + "NaN" + "_" + "NaN";
                 return info;
             }
             if(dt == DriveType.Removable) {
-                info = disk + " " + "Removable" + " " + "NaN" + " " + "NaN" + " " + "NaN";
+                info = disk + "_" + "Removable" + "_" + "NaN" + "_" + "NaN" + "_" + "NaN";
                 return info;
             }
-            info = disk + " " + "NaN" + " " + "NaN" + " " + "NaN" + " " + "NaN";
+            info = disk + "_" + "NaN" + "_" + "NaN" + "_" + "NaN" + "_" + "NaN";
             return info;
         }
     }

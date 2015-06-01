@@ -77,6 +77,8 @@ namespace ResourceAnalyzer {
         static extern bool GetProcessTimes(IntPtr hProcess, out ComTypes.FILETIME lpCreationTime, out ComTypes.FILETIME lpExitTime,
             out ComTypes.FILETIME lpKernelTime, out ComTypes.FILETIME lpUserTime);
 
+        
+
         public static void ProcUsage(TimeData info) {
             ComTypes.FILETIME procKernel2, procUser2, sysKernel2, sysUser2, creation, exit, idle;
             IntPtr handle = OpenProcess(ProcessAccessFlags.QueryInformation, false, info._id);
@@ -109,6 +111,31 @@ namespace ResourceAnalyzer {
               ((UInt64)(b.dwHighDateTime << 32)) | (UInt64)b.dwLowDateTime;
 
             return aInt - bInt;
+        }
+
+        [DllImport("advapi32.dll", EntryPoint = "RegOpenKeyEx")]
+        public static extern int RegOpenKeyEx_DllImport(UIntPtr hKey, string lpSubKey, uint ulOptions, int samDesired, out IntPtr phkResult);
+
+        [DllImport("advapi32.dll", EntryPoint = "RegQueryValueEx")]
+        public static extern int RegQueryValueEx_DllImport(IntPtr hKey, string lpValueName, int lpReserved, out uint lpType, StringBuilder lpData, ref int lpcbData);
+
+        public static string RegInfo(int pick) {
+            IntPtr hKeyVal;
+            uint lpType;
+            UIntPtr HkeyLocalMachine = (UIntPtr)0x80000002;
+            string lpSubKey = "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0";
+            int KEY_QUERY_VALUE = 0x1;
+            StringBuilder sb = new StringBuilder(261);
+            int lpcbData = sb.Capacity;
+            int valueRet = RegOpenKeyEx_DllImport(HkeyLocalMachine, lpSubKey, 0, KEY_QUERY_VALUE, out hKeyVal);
+            if(pick == 1) {
+                valueRet = RegQueryValueEx_DllImport(hKeyVal, "Identifier", 0, out lpType, sb, ref lpcbData);
+                return sb.ToString();
+            }
+            else {
+                valueRet = RegQueryValueEx_DllImport(hKeyVal, "ProcessorNameString", 0, out lpType, sb, ref lpcbData);
+                return sb.ToString();
+            }
         }
     }
 
