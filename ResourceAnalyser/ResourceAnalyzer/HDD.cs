@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Management;
 
 namespace ResourceAnalyzer {
     public static class HDD {
@@ -78,7 +79,7 @@ namespace ResourceAnalyzer {
                     Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
                 string volnamestr = volname.ToString();
                 string fsnamestr = fsname.ToString();
-                Console.WriteLine(volnamestr + " " + fsnamestr);
+                //Console.WriteLine(volnamestr + " " + fsnamestr);
                 ulong FreeBytesAvailable;
                 ulong TotalNumberOfBytes;
                 ulong TotalNumberOfFreeBytes;
@@ -103,6 +104,31 @@ namespace ResourceAnalyzer {
                 return info;
             }
             info = disk + "_" + "NaN" + "_" + "NaN" + "_" + "NaN" + "_" + "NaN";
+            return info;
+        }
+
+        public static string WMIInf() {
+            string info = " ";
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_PerfFormattedData_PerfDisk_PhysicalDisk");
+            foreach(ManagementObject queryObj in searcher.Get()) {
+                info = queryObj["PercentIdleTime"].ToString();
+                info += ";" + queryObj["PercentDiskReadTime"].ToString();
+                info += ";" + queryObj["PercentDiskWriteTime"].ToString();
+                return info;
+            }
+            return info;
+        }
+
+        public static string WMIInf2() {
+            string info = " ";
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_DiskDrive"); 
+            foreach(ManagementObject queryObj in searcher.Get()) {
+                info = queryObj["InterfaceType"].ToString();
+                info += ";" + queryObj["Model"].ToString();
+                info += ";" + queryObj["Partitions"].ToString();
+                info += ";" + queryObj["SerialNumber"].ToString();
+                return info;
+            }
             return info;
         }
     }

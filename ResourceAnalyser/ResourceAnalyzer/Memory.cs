@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Diagnostics;
+using System.Management;
 
 namespace ResourceAnalyzer {
     public static class Memory {       
@@ -71,14 +72,27 @@ namespace ResourceAnalyzer {
                 memoryCounters.cb = (uint)Marshal.SizeOf(typeof(PROCESS_MEMORY_COUNTERS_EX));
 
                 if(GetProcessMemoryInfo(hProcess, out memoryCounters, memoryCounters.cb)) {
-                    info = memoryCounters.PrivateUsage / 1024 + " " + memoryCounters.WorkingSetSize / 1024 + " " + memoryCounters.QuotaNonPagedPoolUsage / 1024;
+                    info = memoryCounters.PrivateUsage / 1024 + " " + memoryCounters.WorkingSetSize / 1024 + " " + memoryCounters.QuotaNonPagedPoolUsage / 1024 + " " + memoryCounters.PageFaultCount;
                 }
-                else
-                    info = "NaN NaN NaN";
+                else {
+                    int a;
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2","SELECT * FROM Win32_Process");
+                    foreach(ManagementObject queryObj in searcher.Get()) {
+                        a = Convert.ToInt32(queryObj["Handle"]);
+                        if(a == (int)id) {
+                            info = (Convert.ToInt32(queryObj["PageFileUsage"])).ToString();
+                            info += " " + (Convert.ToInt32(queryObj["WorkingSetSize"]) / 1024).ToString();
+                            info += " " + (Convert.ToInt32(queryObj["QuotaNonPagedPoolUsage"]) / 1024).ToString();
+                            info += " " + (Convert.ToInt32(queryObj["PageFaults"])).ToString();
+                            return info;
+                        }
+                    }
+                    info = "NaN NaN NaN NaN";
+                }
                 return info;
             }
             catch{
-                info = "NaN NaN NaN";
+                info = "NaN NaN NaN NaN";
                 return info;
             }
         }

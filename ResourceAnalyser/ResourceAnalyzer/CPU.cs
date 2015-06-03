@@ -114,10 +114,10 @@ namespace ResourceAnalyzer {
         }
 
         [DllImport("advapi32.dll", EntryPoint = "RegOpenKeyEx")]
-        public static extern int RegOpenKeyEx_DllImport(UIntPtr hKey, string lpSubKey, uint ulOptions, int samDesired, out IntPtr phkResult);
+        public static extern int RegOpenKeyEx(UIntPtr hKey, string lpSubKey, uint ulOptions, int samDesired, out IntPtr phkResult);
 
         [DllImport("advapi32.dll", EntryPoint = "RegQueryValueEx")]
-        public static extern int RegQueryValueEx_DllImport(IntPtr hKey, string lpValueName, int lpReserved, out uint lpType, StringBuilder lpData, ref int lpcbData);
+        public static extern int RegQueryValueEx(IntPtr hKey, string lpValueName, int lpReserved, out uint lpType, StringBuilder lpData, ref int lpcbData);
 
         public static string RegInfo(int pick) {
             IntPtr hKeyVal;
@@ -127,13 +127,13 @@ namespace ResourceAnalyzer {
             int KEY_QUERY_VALUE = 0x1;
             StringBuilder sb = new StringBuilder(261);
             int lpcbData = sb.Capacity;
-            int valueRet = RegOpenKeyEx_DllImport(HkeyLocalMachine, lpSubKey, 0, KEY_QUERY_VALUE, out hKeyVal);
+            int valueRet = RegOpenKeyEx(HkeyLocalMachine, lpSubKey, 0, KEY_QUERY_VALUE, out hKeyVal);
             if(pick == 1) {
-                valueRet = RegQueryValueEx_DllImport(hKeyVal, "Identifier", 0, out lpType, sb, ref lpcbData);
+                valueRet = RegQueryValueEx(hKeyVal, "Identifier", 0, out lpType, sb, ref lpcbData);
                 return sb.ToString();
             }
             else {
-                valueRet = RegQueryValueEx_DllImport(hKeyVal, "ProcessorNameString", 0, out lpType, sb, ref lpcbData);
+                valueRet = RegQueryValueEx(hKeyVal, "ProcessorNameString", 0, out lpType, sb, ref lpcbData);
                 return sb.ToString();
             }
         }

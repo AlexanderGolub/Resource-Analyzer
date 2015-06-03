@@ -23,6 +23,7 @@ namespace ResourceAnalyzer {
     public partial class MainWindow : Window {
         private System.Windows.Threading.DispatcherTimer _dispatcherTimer;
         private System.Windows.Threading.DispatcherTimer _dispatcherTimer2;
+        private System.Windows.Threading.DispatcherTimer _dispatcherTimer3;
         CPU _a;
         public MainWindow() {
             InitializeComponent();
@@ -33,9 +34,13 @@ namespace ResourceAnalyzer {
             _dispatcherTimer2 = new System.Windows.Threading.DispatcherTimer();
             _dispatcherTimer2.Tick += new EventHandler(this.dispatcherTimer2_Tick);
             _dispatcherTimer2.Interval = new TimeSpan(0, 0, 0, 0, 600);
+            _dispatcherTimer3 = new System.Windows.Threading.DispatcherTimer();
+            _dispatcherTimer3.Tick += new EventHandler(this.dispatcherTimer3_Tick);
+            _dispatcherTimer3.Interval = new TimeSpan(0, 0, 0, 0, 600);
 
             this.MemTab.GotFocus += this.MemTab_GotFocus;
             this.MemTab.LostFocus += this.MemTab_LostFocus;
+            ShowGenTab();
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e) {
@@ -47,6 +52,10 @@ namespace ResourceAnalyzer {
 
         private void dispatcherTimer2_Tick(object sender, EventArgs e) {
             ShowCPU();
+        }
+
+        private void dispatcherTimer3_Tick(object sender, EventArgs e) {
+            ShowHDD();
         }
 
         public void ShowCPU() {
@@ -65,7 +74,7 @@ namespace ResourceAnalyzer {
                     Times.Add(time);
                 }
                 this.ProcNum.Content = a.GetNumber().ToString();
-                Console.WriteLine(a.GetNumber().ToString());
+                //Console.WriteLine(a.GetNumber().ToString());
                 Thread.Sleep(300);
                 foreach(var obj in Times) {
                     CPUProc.ProcUsage(obj);
@@ -79,6 +88,16 @@ namespace ResourceAnalyzer {
             }
         }
 
+        private void ShowHDD() {
+            string inf = HDD.WMIInf();
+            char[] delimiterChars = { ';' };
+            string[] words = inf.Split(delimiterChars);
+            this.HDDIdle.Content = words[0] + " %";
+            this.HDDRead.Content = words[1] + " %";
+            this.HDDWrite.Content = words[2] + " %";
+            
+        }
+
         private void ShowMemory() {
             Processes a = new Processes();
             MEMORYSTATUSEX state = new MEMORYSTATUSEX();
@@ -89,8 +108,10 @@ namespace ResourceAnalyzer {
             this.TPhys.Content = state.ullTotalPhys / 1024 / 1024 + " МБ";
             this.TPageF.Content = state.ullTotalPageFile / 1024 / 1024 + " МБ";
             this.TVirt.Content = state.ullTotalVirtual / 1024 / 1024 + " МБ";
+            this.Percent.Content = state.dwMemoryLoad + " %";
             long l = Memory.GetPhysMemory();
             this.IPhys.Content = l / 1024 + " МБ";
+            this.Resv.Content = (l / 1024 - (long)state.ullTotalPhys / 1024 / 1024) + " МБ" ;
             StringCollection inf = new StringCollection();
             inf = a.GetInfo();
             char[] delimiterChars = { ' ' };
@@ -100,11 +121,11 @@ namespace ResourceAnalyzer {
                     int id = Convert.ToInt32(words[1]);
                     string filler = Memory.ProcMemory((IntPtr)id);
                     string[] words2 = filler.Split(delimiterChars);
-                    this.MemListView.Items.Add(new MemData { Proc = words[0], ID = words[1], PR = words2[0], WS = words2[1], NPP = words2[2] });
+                    this.MemListView.Items.Add(new MemData { Proc = words[0], ID = words[1], PR = words2[0], WS = words2[1], NPP = words2[2], MST=words2[3] });
                 }
             }
             catch {
-                this.MemListView.Items.Add(new MemData { Proc = "NaN", ID = "NaN", PR = "NaN", WS = "NaN", NPP = "NaN" });
+                this.MemListView.Items.Add(new MemData { Proc = "NaN", ID = "NaN", PR = "NaN", WS = "NaN", NPP = "NaN", MST = "NaN" });
             }
         }
 
@@ -129,6 +150,7 @@ namespace ResourceAnalyzer {
         }
 
         private void HDDTab_GotFocus(object sender, RoutedEventArgs e) {
+            _dispatcherTimer3.Start();
             StringCollection output = new StringCollection();
             output = HDD.Show();
             char[] delimiterChars = { '_' };
@@ -136,10 +158,48 @@ namespace ResourceAnalyzer {
                 string[] words = obj.Split(delimiterChars);
                 this.HDDListView.Items.Add(new HDDData { Disk = words[0], Name = words[1], FS = words[2], Av = words[3], Tot = words[4] });
             }
+            char[] delimiterChars2 = { ';' };
+            string inf = HDD.WMIInf2();
+            string[] words1 = inf.Split(delimiterChars2);
+            this.IFType.Content = words1[0];
+            this.HDDModel.Content = words1[1];
+            this.PartNum.Content = words1[2];
+            this.SerNum.Content = words1[3];
         }
 
         private void HDDTab_LostFocus(object sender, RoutedEventArgs e) {
             this.HDDListView.Items.Clear();
+            _dispatcherTimer3.Stop();
+        }
+
+        private void GenTab_GotFocus(object sender, RoutedEventArgs e) {
+            ShowGenTab();
+        }
+
+        private void GenTab_LostFocus(object sender, RoutedEventArgs e) {
+            //this.GenTab.Items.Clear();
+        }
+
+        private void ShowGenTab() {
+            string inf = GeneralA.ShowNames();
+            char[] delimiterChars = { ';' };
+            string[] words = inf.Split(delimiterChars);
+            this.PCName.Content = words[1];
+            this.ModelOfPc.Content = words[2];
+            this.Manufact.Content = words[3];
+            this.LogCPU.Content = words[4];
+            this.PUName.Content = words[5];
+            this.SysType.Content = words[6];
+            this.WG.Content = words[7];
+            inf = GeneralA.ShowBIOS();
+            string[] words2 = inf.Split(delimiterChars);
+            this.BIOSName.Content = words2[1];
+            this.BIOSMan.Content = words2[2];
+            this.CPUTemp.Content = GeneralA.CPUTemp();
+            inf = GeneralA.Video();
+            string[] words3 = inf.Split(delimiterChars);
+            this.GPU.Content = words3[0];
+            this.GPURAM.Content = words3[1] + " МБ";
         }
 
 
@@ -151,6 +211,7 @@ namespace ResourceAnalyzer {
         public string PR { get; set; }
         public string WS { get; set; }
         public string NPP { get; set; }
+        public string MST { get; set; }
     }
 
     public class HDDData {

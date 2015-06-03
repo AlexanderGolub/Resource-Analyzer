@@ -4,13 +4,37 @@
         ResizeMode="NoResize"
         Title="Resource Analyzer" Height="444.6" Width="591" Icon="Resources/ra.png">
     <TabControl x:Name="Firsttab" HorizontalAlignment="Left" Height="416" VerticalAlignment="Top" Width="581">
-        <TabItem Header="Общая информация">
+        <TabItem Header="Общая информация" x:Name="GenTab" GotFocus="GenTab_GotFocus" LostFocus="GenTab_LostFocus">
             <Grid>
+                <Label Content="Имя компьютера" HorizontalAlignment="Left" Margin="32,13,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label Content="Имя пользователя" HorizontalAlignment="Left" Margin="32,44,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label Content="Производитель" HorizontalAlignment="Left" Margin="32,75,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label Content="Модель" HorizontalAlignment="Left" Margin="32,106,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label Content="Тип системы" HorizontalAlignment="Left" Margin="32,137,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label Content="Рабочая группа" HorizontalAlignment="Left" Margin="32,168,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label Content="Лог. процессоров" HorizontalAlignment="Left" Margin="32,199,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label x:Name="PCName" Content="" HorizontalAlignment="Left" Margin="157,13,0,0" VerticalAlignment="Top" Width="195"/>
+                <Label x:Name="PUName" Content="" HorizontalAlignment="Left" Margin="157,44,0,0" VerticalAlignment="Top" Width="195"/>
+                <Label x:Name="Manufact" Content="" HorizontalAlignment="Left" Margin="157,75,0,0" VerticalAlignment="Top" Width="195"/>
+                <Label x:Name="ModelOfPc" Content="" HorizontalAlignment="Left" Margin="157,106,0,0" VerticalAlignment="Top" Width="195"/>
+                <Label x:Name="SysType" Content="" HorizontalAlignment="Left" Margin="157,137,0,0" VerticalAlignment="Top" Width="195"/>
+                <Label x:Name="WG" Content="" HorizontalAlignment="Left" Margin="157,168,0,0" VerticalAlignment="Top" Width="195"/>
+                <Label x:Name="LogCPU" Content="" HorizontalAlignment="Left" Margin="157,199,0,0" VerticalAlignment="Top" Width="195"/>
+                <Label Content="Имя BIOS" HorizontalAlignment="Left" Margin="32,225,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label x:Name="BIOSName" Content="" HorizontalAlignment="Left" Margin="157,225,0,0" VerticalAlignment="Top" Width="266"/>
+                <Label Content="Произв. BIOS" HorizontalAlignment="Left" Margin="32,251,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label x:Name="BIOSMan" Content="" HorizontalAlignment="Left" Margin="157,251,0,0" VerticalAlignment="Top" Width="195"/>
+                <Label Content="Температура CPU" HorizontalAlignment="Left" Margin="32,282,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label x:Name="CPUTemp" Content="" HorizontalAlignment="Left" Margin="157,282,0,0" VerticalAlignment="Top" Width="125"/>
+                <Label Content="Видеокарта" HorizontalAlignment="Left" Margin="32,312,0,0" VerticalAlignment="Top" Width="110"/>
+                <Label x:Name="GPU" Content="" HorizontalAlignment="Left" Margin="157,312,0,0" VerticalAlignment="Top" Width="266"/>
+                <Label Content="Объем видеопамяти" HorizontalAlignment="Left" Margin="32,343,0,0" VerticalAlignment="Top" Width="124"/>
+                <Label x:Name="GPURAM" Content="" HorizontalAlignment="Left" Margin="161,343,0,0" VerticalAlignment="Top" Width="266"/>
             </Grid>
         </TabItem>
         <TabItem Header="Память" x:Name="MemTab">
             <Grid>
-                <ListView x:Name="MemListView" HorizontalAlignment="Left" Height="200" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
+                <ListView x:Name="MemListView" HorizontalAlignment="Left" Height="228" Margin="5,5,0,0" VerticalAlignment="Top" Width="556">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -21,12 +45,13 @@
                             <GridViewColumn Header="Процесс" DisplayMemberBinding="{Binding Proc}" Width="100"/>
                             <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="50"/>
                             <GridViewColumn Header="Выделено КБ" DisplayMemberBinding="{Binding PR}" Width="115" />
-                            <GridViewColumn Header="Рабочий набор КБ" DisplayMemberBinding="{Binding WS}" Width="125"/>
-                            <GridViewColumn Header="Невыгружаемый пул КБ" DisplayMemberBinding="{Binding NPP}" Width="140"/>
+                            <GridViewColumn Header="Рабочий набор КБ" DisplayMemberBinding="{Binding WS}" Width="120"/>
+                            <GridViewColumn Header="Невыгружаемый пул КБ" DisplayMemberBinding="{Binding NPP}" Width="45"/>
+                            <GridViewColumn Header="Ошибки отсутствия страниц" DisplayMemberBinding="{Binding MST}" Width="100"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <TabControl HorizontalAlignment="Left" Height="122" Margin="5,210,0,0" VerticalAlignment="Top" Width="188">
+                <TabControl HorizontalAlignment="Left" Height="122" Margin="5,238,0,0" VerticalAlignment="Top" Width="188">
                     <TabItem Header="Всего" x:Name="TotalTab">
                         <Grid>
                             <Label Content="Физическая" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="93"/>
@@ -48,8 +73,12 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
-                <Label Content="Установлено" HorizontalAlignment="Left" Margin="17,337,0,0" VerticalAlignment="Top" Width="83"/>
-                <Label x:Name="IPhys" Content="" HorizontalAlignment="Left" Margin="117,337,0,0" VerticalAlignment="Top" Width="67"/>
+                <Label Content="Установлено" HorizontalAlignment="Left" Margin="240,303,0,0" VerticalAlignment="Top" Width="83"/>
+                <Label x:Name="IPhys" Content="" HorizontalAlignment="Left" Margin="354,303,0,0" VerticalAlignment="Top" Width="67"/>
+                <Label Content="Зарезервировано" HorizontalAlignment="Left" Margin="240,334,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="Resv" Content="" HorizontalAlignment="Left" Margin="354,334,0,0" VerticalAlignment="Top" Width="67"/>
+                <Label Content="Используется" HorizontalAlignment="Left" Margin="240,272,0,0" VerticalAlignment="Top" Width="83"/>
+                <Label x:Name="Percent" Content="" HorizontalAlignment="Left" Margin="354,272,0,0" VerticalAlignment="Top" Width="67"/>
             </Grid>
         </TabItem>
         <TabItem Header="Диск" x:Name="HDDTab" GotFocus="HDDTab_GotFocus" LostFocus="HDDTab_LostFocus" >
@@ -70,6 +99,20 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
+                <Label Content="Бездействие" HorizontalAlignment="Left" Margin="34,120,0,0" VerticalAlignment="Top" Width="90"/>
+                <Label Content="Чтение" HorizontalAlignment="Left" Margin="34,151,0,0" VerticalAlignment="Top" Width="90"/>
+                <Label Content="Запись" HorizontalAlignment="Left" Margin="34,182,0,0" VerticalAlignment="Top" Width="90"/>
+                <Label x:Name="HDDIdle" Content="" HorizontalAlignment="Left" Margin="129,120,0,0" VerticalAlignment="Top" Width="55"/>
+                <Label x:Name="HDDRead" Content="" HorizontalAlignment="Left" Margin="129,151,0,0" VerticalAlignment="Top" Width="55"/>
+                <Label x:Name="HDDWrite" Content="" HorizontalAlignment="Left" Margin="129,182,0,0" VerticalAlignment="Top" Width="55"/>
+                <Label Content="Тип интерфейса" HorizontalAlignment="Left" Margin="34,237,0,0" VerticalAlignment="Top" Width="103"/>
+                <Label Content="Модель" HorizontalAlignment="Left" Margin="34,268,0,0" VerticalAlignment="Top" Width="103"/>
+                <Label Content="Серийный номер" HorizontalAlignment="Left" Margin="34,299,0,0" VerticalAlignment="Top" Width="113"/>
+                <Label Content="Количество разделов" HorizontalAlignment="Left" Margin="34,330,0,0" VerticalAlignment="Top" Width="130"/>
+                <Label x:Name="PartNum" Content="" HorizontalAlignment="Left" Margin="182,330,0,0" VerticalAlignment="Top" Width="178"/>
+                <Label x:Name="SerNum" Content="" HorizontalAlignment="Left" Margin="182,300,0,0" VerticalAlignment="Top" Width="178"/>
+                <Label x:Name="HDDModel" Content="" HorizontalAlignment="Left" Margin="182,269,0,0" VerticalAlignment="Top" Width="178"/>
+                <Label x:Name="IFType" Content="" HorizontalAlignment="Left" Margin="182,239,0,0" VerticalAlignment="Top" Width="178"/>
             </Grid>
         </TabItem>
         <TabItem Header="Процессор" x:Name="CPUTab" GotFocus="CPUTab_GotFocus" LostFocus="CPUTab_LostFocus">
